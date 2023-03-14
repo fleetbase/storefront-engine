@@ -1,7 +1,7 @@
 {
     "name": "@fleetbase/flb-storefront-extension",
     "extension": "Storefront",
-    "icon": "house",
+    "icon": "store",
     "version": "0.0.0",
     "description": "The default blueprint for ember-cli addons.",
     "keywords": [
