@@ -1,7 +1,7 @@
 <EmberWormhole @to="sidebar-menu-items">
     <Layout::Sidebar::Panel @open={{true}} @title="Storefront">
         <Layout::Sidebar::Item @route="console.storefront.home" @icon="home">Dashboard</Layout::Sidebar::Item>
-        <Layout::Sidebar::Item @route="console.storefront.products" @icon="box-alt" disabled={{not this.activeStore.id}}>Products</Layout::Sidebar::Item>
+        <Layout::Sidebar::Item @route="console.storefront.products" @icon="box" disabled={{not this.activeStore.id}}>Products</Layout::Sidebar::Item>
         <Layout::Sidebar::Item @route="console.storefront.customers" @icon="users" disabled={{not this.activeStore.id}}>Customers</Layout::Sidebar::Item>
         <Layout::Sidebar::Item @route="console.storefront.orders" @icon="file-invoice-dollar" disabled={{not this.activeStore.id}}>Orders</Layout::Sidebar::Item>
         <Layout::Sidebar::Item @route="console.storefront.networks" @icon="network-wired" disabled={{not this.activeStore.id}}>Networks</Layout::Sidebar::Item>
