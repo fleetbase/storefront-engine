@@ -2,13 +2,11 @@ import { module, test } from 'qunit';
 import { setupTest } from 'dummy/tests/helpers';
 
 module('Unit | Controller | products/index/category/new', function (hooks) {
-  setupTest(hooks);
+    setupTest(hooks);
 
-  // TODO: Replace this with your real tests.
-  test('it exists', function (assert) {
-    let controller = this.owner.lookup(
-      'controller:products/index/category/new'
-    );
-    assert.ok(controller);
-  });
+    // TODO: Replace this with your real tests.
+    test('it exists', function (assert) {
+        let controller = this.owner.lookup('controller:products/index/category/new');
+        assert.ok(controller);
+    });
 });

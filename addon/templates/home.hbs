@@ -1,2 +1,7 @@
-{{page-title "Home"}}
-{{outlet}}
+<Layout::Section::Header @title="Drivers" @hideActions={{true}} />
+
+<Layout::Section::Body class="space-y-4" @padded={{true}}>
+    <Widget::StorefrontMetrics />
+    <Widget::Orders />
+    <Widget::Customers />
+</Layout::Section::Body>

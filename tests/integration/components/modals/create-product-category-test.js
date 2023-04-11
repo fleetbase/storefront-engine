@@ -3,27 +3,24 @@ import { setupRenderingTest } from 'dummy/tests/helpers';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module(
-  'Integration | Component | modals/create-product-category',
-  function (hooks) {
+module('Integration | Component | modals/create-product-category', function (hooks) {
     setupRenderingTest(hooks);
 
     test('it renders', async function (assert) {
-      // Set any properties with this.set('myProperty', 'value');
-      // Handle any actions with this.set('myAction', function(val) { ... });
+        // Set any properties with this.set('myProperty', 'value');
+        // Handle any actions with this.set('myAction', function(val) { ... });
 
-      await render(hbs`<Modals::CreateProductCategory />`);
+        await render(hbs`<Modals::CreateProductCategory />`);
 
-      assert.dom(this.element).hasText('');
+        assert.dom(this.element).hasText('');
 
-      // Template block usage:
-      await render(hbs`
+        // Template block usage:
+        await render(hbs`
       <Modals::CreateProductCategory>
         template block text
       </Modals::CreateProductCategory>
     `);
 
-      assert.dom(this.element).hasText('template block text');
+        assert.dom(this.element).hasText('template block text');
     });
-  }
-);
+});

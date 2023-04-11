@@ -1,3 +1,3 @@
 export default function getNotificationSchemas() {
-  return true;
+    return true;
 }
