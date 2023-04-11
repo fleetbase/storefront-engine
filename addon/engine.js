@@ -8,12 +8,12 @@ const { modulePrefix } = config;
 const externalRoutes = ['console', 'extensions'];
 
 export default class StorefrontEngine extends Engine {
-  modulePrefix = modulePrefix;
-  Resolver = Resolver;
-  dependencies = {
-    services,
-    externalRoutes,
-  };
+    modulePrefix = modulePrefix;
+    Resolver = Resolver;
+    dependencies = {
+        services,
+        externalRoutes,
+    };
 }
 
 loadInitializers(StorefrontEngine, modulePrefix);

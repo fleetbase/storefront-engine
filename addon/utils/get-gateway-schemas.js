@@ -1,3 +1,3 @@
 export default function getGatewaySchemas() {
-  return true;
+    return true;
 }

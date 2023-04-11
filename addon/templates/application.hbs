@@ -1,4 +1,5 @@
 <EmberWormhole @to="sidebar-menu-items">
+    <StoreSelector @stores={{@model}} @activeStore={{this.activeStore}} @wrapperClass="mb-2" @onCreateStore={{this.createNewStorefront}} @onSwitchStore={{this.switchActiveStore}} />
     <Layout::Sidebar::Panel @open={{true}} @title="Storefront">
         <Layout::Sidebar::Item @route="console.storefront.home" @icon="home">Dashboard</Layout::Sidebar::Item>
         <Layout::Sidebar::Item @route="console.storefront.products" @icon="box" disabled={{not this.activeStore.id}}>Products</Layout::Sidebar::Item>
