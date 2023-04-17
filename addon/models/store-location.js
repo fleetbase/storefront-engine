@@ -1,5 +1,6 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { computed } from '@ember/object';
+import { isArray } from '@ember/array';
 import { getOwner } from '@ember/application';
 import { format, formatDistanceToNow } from 'date-fns';
 
@@ -10,8 +11,7 @@ export default class StoreLocationModel extends Model {
     @attr('string') place_uuid;
 
     /** @relationships */
-    @belongsTo('place', { async: false }) place;
-    // @belongsTo('store') store;
+    @belongsTo('storefront-place', { async: false }) place;
     @hasMany('store-hour') hours;
 
     /** @attributes */
@@ -64,6 +64,10 @@ export default class StoreLocationModel extends Model {
 
         for (let i = 0; i < this.hours.length; i++) {
             const hour = this.hours.objectAt(i);
+
+            if (!isArray(schedule[hour.day_of_week])) {
+                schedule[hour.day_of_week] = [];
+            }
 
             schedule[hour.day_of_week].pushObject(hour);
         }

@@ -4,6 +4,9 @@ export default buildRoutes(function () {
     this.route('home', { path: '/' });
     this.route('products', function () {
         this.route('index', { path: '/' }, function () {
+            this.route('index', { path: '/' }, function () {
+                this.route('edit', { path: '/:public_id' });
+            });
             this.route('category', { path: '/:slug' }, function () {
                 this.route('new');
                 this.route('edit', { path: '/:public_id' });

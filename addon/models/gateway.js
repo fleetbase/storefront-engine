@@ -8,7 +8,7 @@ export default class GatewayModel extends Model {
     @attr('string') owner_uuid;
 
     /** @attributes */
-    @attr('string', { defaultValue: 'store:storefront' }) owner_type;
+    @attr('string', { defaultValue: 'storefront:store' }) owner_type;
     @attr('string', { defaultValue: '' }) name;
     @attr('string', { defaultValue: '' }) code;
     @attr('string') type;
