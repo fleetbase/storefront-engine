@@ -1,8 +1,8 @@
 import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 import { format, formatDistanceToNow } from 'date-fns';
 import { getOwner } from '@ember/application';
-import Store from './store';
 import isEmail from '@fleetbase/console/utils/is-email';
+import Store from './store';
 
 export default class NetworkModel extends Model {
     /** @ids */
@@ -46,6 +46,23 @@ export default class NetworkModel extends Model {
     @attr('date') created_at;
     @attr('date') updated_at;
 
+    /** @computed */
+    get updatedAgo() {
+        return formatDistanceToNow(this.updated_at);
+    }
+
+    get updatedAt() {
+        return format(this.updated_at, 'PPP');
+    }
+
+    get createdAgo() {
+        return formatDistanceToNow(this.created_at);
+    }
+
+    get createdAt() {
+        return format(this.created_at, 'PPP p');
+    }
+
     /** @methods */
     toJSON() {
         return this.serialize();
@@ -59,7 +76,7 @@ export default class NetworkModel extends Model {
             return store
                 .query('notification-channel', { owner_uuid: this.id })
                 .then((notificationChannels) => {
-                    this.notification_channels = notificationChannels;
+                    this.notification_channels = notificationChannels.toArray();
 
                     resolve(notificationChannels);
                 })
@@ -75,7 +92,7 @@ export default class NetworkModel extends Model {
             return store
                 .query('gateway', { owner_uuid: this.id })
                 .then((gateways) => {
-                    this.gateways = gateways;
+                    this.gateways = gateways.toArray();
 
                     resolve(gateways);
                 })
@@ -91,7 +108,7 @@ export default class NetworkModel extends Model {
             return store
                 .query('store', { network: this.id })
                 .then((stores) => {
-                    this.stores = stores;
+                    this.stores = stores.toArray();
 
                     resolve(stores);
                 })
@@ -145,22 +162,5 @@ export default class NetworkModel extends Model {
         recipients = recipients.filter((email) => isEmail(email));
 
         return fetch.post(`networks/${this.id}/invite`, { recipients }, { namespace: 'storefront/int/v1' });
-    }
-
-    /** @computed */
-    get updatedAgo() {
-        return formatDistanceToNow(this.updated_at);
-    }
-
-    get updatedAt() {
-        return format(this.updated_at, 'PPP');
-    }
-
-    get createdAgo() {
-        return formatDistanceToNow(this.created_at);
-    }
-
-    get createdAt() {
-        return format(this.created_at, 'PPP p');
     }
 }

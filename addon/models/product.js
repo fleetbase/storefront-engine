@@ -20,7 +20,7 @@ export default class ProductModel extends Model {
     @belongsTo('category') category;
     @belongsTo('file') primary_image;
     @hasMany('file') files;
-    @hasMany('product-variant') variants;
+    @hasMany('product-variant', { async: false }) variants;
     @hasMany('product-addon-category') addon_categories;
     @hasMany('product-hour') hours;
 
@@ -180,7 +180,7 @@ export default class ProductModel extends Model {
 
         return new Promise((resolve) => {
             return store
-                .query('file', { key_uuid: this.id, type: 'storefront_product' })
+                .query('file', { subject_uuid: this.id, type: 'storefront_product' })
                 .then((files) => {
                     this.files = files;
 

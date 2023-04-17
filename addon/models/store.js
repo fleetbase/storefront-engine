@@ -83,9 +83,9 @@ export default class StoreModel extends Model {
 
         return new Promise((resolve) => {
             return store
-                .query('file', { key_uuid: this.id, type: 'storefront_store_media' })
+                .query('file', { subject_uuid: this.id, type: 'storefront_store_media' })
                 .then((files) => {
-                    this.files = files;
+                    this.files = files.toArray();
                     this.isLoadingFiles = false;
 
                     resolve(files);
