@@ -20,6 +20,6 @@ export default class CustomersIndexRoute extends Route {
     };
 
     model(params) {
-        return this.store.query('storefront-customer', params);
+        return this.store.query('customer', params);
     }
 }

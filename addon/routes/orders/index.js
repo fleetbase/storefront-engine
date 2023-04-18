@@ -24,6 +24,6 @@ export default class OrdersIndexRoute extends Route {
     };
 
     model(params) {
-        return this.store.query('storefront-order', params);
+        return this.store.query('order', params);
     }
 }

@@ -11,7 +11,7 @@ export default class StoreLocationModel extends Model {
     @attr('string') place_uuid;
 
     /** @relationships */
-    @belongsTo('storefront-place', { async: false }) place;
+    @belongsTo('place', { async: false }) place;
     @hasMany('store-hour') hours;
 
     /** @attributes */

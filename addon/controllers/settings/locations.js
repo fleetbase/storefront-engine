@@ -35,6 +35,13 @@ export default class SettingsLocationsController extends Controller {
     @service store;
 
     /**
+     * Inject the `hostRouter` service
+     *
+     * @var {Service}
+     */
+    @service hostRouter;
+
+    /**
      * Inject the `storefront` service
      *
      * @var {Service}
@@ -42,7 +49,6 @@ export default class SettingsLocationsController extends Controller {
     @service storefront;
 
     @alias('storefront.activeStore') activeStore;
-    @tracked locations = [];
 
     daysOfTheWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -55,7 +61,7 @@ export default class SettingsLocationsController extends Controller {
         const place = this.store.createRecord('place');
         const storeLocation = this.store.createRecord('store-location', {
             store_uuid: this.activeStore.id,
-            place
+            place,
         });
 
         return this.editStoreLocation(storeLocation, {
@@ -67,16 +73,16 @@ export default class SettingsLocationsController extends Controller {
 
     @action async editStoreLocation(storeLocation, options = {}) {
         await storeLocation.loadPlace();
-        
+
         let { place } = storeLocation;
 
         if (!place) {
             place = this.store.createRecord('place', {
-                name: storeLocation.name
+                name: storeLocation.name,
             });
         }
 
-        this.modalsManager.show('modals/place-form', {
+        this.modalsManager.show('modals/store-location-form', {
             title: 'Edit store location',
             acceptButtonText: 'Save Changes',
             acceptButtonIcon: 'save',
@@ -87,7 +93,8 @@ export default class SettingsLocationsController extends Controller {
                 place.setProperties({ ...selected });
 
                 if (coordinatesInputComponent) {
-                    coordinatesInputComponent.updateCoordinates(selected.location);
+                    const [longitude, latitude] = selected.location.coordinates;
+                    coordinatesInputComponent.updateCoordinates(latitude, longitude);
                 }
             },
             setCoordinatesInput: (coordinatesInputComponent) => {
@@ -122,7 +129,7 @@ export default class SettingsLocationsController extends Controller {
                         });
                 });
             },
-            ...options
+            ...options,
         });
     }
 

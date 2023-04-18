@@ -36,7 +36,7 @@ export default class WidgetCustomersComponent extends Component {
             }
 
             this.store
-                .query('storefront-customer', {
+                .query('customer', {
                     storefront,
                     limit: 14,
                 })

@@ -55,7 +55,7 @@ export default class ProductsIndexController extends Controller {
     }
 
     @action createNewProductCategory() {
-        const category = this.store.createRecord('storefront-category', {
+        const category = this.store.createRecord('category', {
             company_uuid: this.currentUser.companyId,
             owner_uuid: this.currentUser.getOption('activeStorefront'),
             owner_type: 'storefront:store',

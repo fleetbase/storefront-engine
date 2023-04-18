@@ -53,7 +53,7 @@ export default class WidgetOrdersComponent extends Component {
             }
 
             this.store
-                .query('storefront-order', {
+                .query('order', {
                     storefront,
                     limit: 14,
                     sort: '-created_at',
