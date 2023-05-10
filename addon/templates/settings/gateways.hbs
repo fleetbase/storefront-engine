@@ -11,8 +11,7 @@
                     </p>
                 </div>
                 <div>
-                    <Button @icon="plus" @iconPrefix="fas" @type="primary" @text="Create new gateway" @onClick={{fn
-                        this.createGateway}} />
+                    <Button @icon="plus" @iconPrefix="fas" @type="primary" @text="Create new gateway" @onClick={{this.createGateway}} />
                 </div>
             </div>
 
@@ -34,7 +33,7 @@
                                 </div>
                             {{else}}
                                 <InputGroup @name={{humanize key}}>
-                                    <Input class="form-input w-full" @placeholder={{humanize key}} @value={{value}} />
+                                    <Input class="form-input w-full" placeholder={{humanize key}} @value={{value}} />
                                 </InputGroup>
                             {{/if}}
                         {{/each-in}}

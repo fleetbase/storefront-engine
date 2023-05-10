@@ -10,8 +10,8 @@ export default function getNotificationSchemas() {
         fcm: {
             firebase_credentials_json: '',
             firebase_database_url: '',
-            firebase_project_name: ''
-        }
+            firebase_project_name: '',
+        },
     };
 
     return schemas;

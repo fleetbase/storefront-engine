@@ -5,7 +5,7 @@ export default function getGatewaySchemas() {
             publishable_key: '',
             show_postal_code: true,
             ideal_payment: false,
-            fpx_payment: false
+            fpx_payment: false,
         },
         braintree: {
             merchant_id: '',
@@ -16,7 +16,7 @@ export default function getGatewaySchemas() {
         qpay: {
             username: '',
             password: '',
-            invoice_id: ''
+            invoice_id: '',
         },
         manual: {
             public_key: '',
@@ -26,7 +26,7 @@ export default function getGatewaySchemas() {
             email: '',
             name: '',
             details: '',
-            payment_instructions: ''
+            payment_instructions: '',
         },
     };
 
