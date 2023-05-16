@@ -2,18 +2,26 @@
     "name": "@fleetbase/storefront-engine",
     "extension": "Storefront",
     "icon": "store",
-    "version": "0.0.0",
-    "description": "The default blueprint for ember-cli addons.",
+    "version": "0.0.1",
+    "priority": 2,
+    "description": "Fleetbase Storefront extension provides a headless commerce module for launching e-commerce stores, on-demand apps, or marketplaces.",
     "keywords": [
+        "fleetbasse-extension",
+        "fleetbase-storefront",
+        "fleetbase",
+        "e-commerce",
+        "headless-commerce",
+        "headless-marketplace",
         "ember-engine",
         "ember-addon"
     ],
-    "repository": "",
+    "repository": "https://github.com/fleetbase/storefront-engine",
     "license": "MIT",
-    "author": "",
+    "author": "Fleetbase Pte Ltd <hello@fleetbase.io>",
     "directories": {
-        "doc": "doc",
-        "test": "tests"
+        "app": "app",
+        "addon": "addon",
+        "tests": "tests"
     },
     "scripts": {
         "build": "ember build --environment=production",
