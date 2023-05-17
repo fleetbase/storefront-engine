@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action, computed } from '@ember/object';
+import { later } from '@ember/runloop';
 
 export default class WidgetOrdersComponent extends Component {
     @service store;
@@ -17,14 +18,20 @@ export default class WidgetOrdersComponent extends Component {
     }
 
     @action async setupWidget() {
-        this.orders = await this.fetchOrders();
+        later(
+            this,
+            () => {
+                this.reloadOrders();
+            },
+            100
+        );
 
         this.storefront.on('order.broadcasted', this.reloadOrders);
         this.storefront.on('storefront.changed', this.reloadOrders);
     }
 
-    @action async reloadOrders() {
-        this.orders = await this.fetchOrders();
+    @action async reloadOrders(params = {}) {
+        this.orders = await this.fetchOrders(params);
     }
 
     @action fetchOrders(params = {}) {
