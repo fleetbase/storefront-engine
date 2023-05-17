@@ -5,7 +5,7 @@ export default class SettingsIndexRoute extends Route {
     @service store;
     @service currentUser;
     @service storefront;
-    
+
     model() {
         return this.store.peekRecord('store', this.currentUser.getOption('activeStorefront'));
     }

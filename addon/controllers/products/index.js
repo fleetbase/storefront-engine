@@ -55,12 +55,11 @@ export default class ProductsIndexController extends Controller {
     }
 
     @action createNewProductCategory() {
-        const category = this.store.createRecord('storefront-category', {
+        const category = this.store.createRecord('category', {
             company_uuid: this.currentUser.companyId,
             owner_uuid: this.currentUser.getOption('activeStorefront'),
             owner_type: 'storefront:store',
-            for: 'storefront_product',
-            icon_url: 'https://flb-assets.s3.ap-southeast-1.amazonaws.com/static/placeholder-icon.png',
+            for: 'storefront_product'
         });
 
         this.modalsManager.show('modals/create-product-category', {

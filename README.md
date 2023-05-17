@@ -1,4 +1,4 @@
-# @fleetbase/console-storefront
+# @fleetbase/storefront-engine
 
 [Short description of the addon.]
 
@@ -13,7 +13,7 @@
 ## Installation
 
 ```
-ember install @fleetbase/console-storefront
+ember install @fleetbase/storefront-engine
 ```
 
 

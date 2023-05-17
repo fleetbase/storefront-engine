@@ -15,9 +15,9 @@
         {{/if}}
     </div>
     <div class="flex items-start">
-        <Ui::Button @wrapperClass="mr-2 flex-shrink-0" @type="default" @icon="folder" @text="Add Category" @onClick={{fn this.createNewCategory this.network}} />
-        <Ui::Button @wrapperClass="mr-2 flex-shrink-0" @type="default" @icon="paper-plane" @text="Invite stores" @onClick={{fn this.invite this.network}} />
-        <Ui::Button @wrapperClass="flex-shrink-0" @type="default" @icon="plus" @iconPrefix="fas" @text="Add stores" @onClick={{fn this.addStores this.network}} />
+        <Button @wrapperClass="mr-2 flex-shrink-0" @type="default" @icon="folder" @text="Add Category" @onClick={{fn this.createNewCategory this.network}} />
+        <Button @wrapperClass="mr-2 flex-shrink-0" @type="default" @icon="paper-plane" @text="Invite stores" @onClick={{fn this.invite this.network}} />
+        <Button @wrapperClass="flex-shrink-0" @type="default" @icon="plus" @iconPrefix="fas" @text="Add stores" @onClick={{fn this.addStores this.network}} />
     </div>
 </div>
 
@@ -47,16 +47,16 @@
                         </div>
                         {{#if this.isLoading}}
                             <div class="ml-2 flex items-center">
-                                <Ui::Spinner class="mr-2 text-sky-400" />
+                                <Spinner class="mr-2 text-sky-400" />
                                 <span class="dark:text-sky-100 text-xs">Loading...</span>
                             </div>
                         {{/if}}
                     </div>
                     <div class="flex items-center">
-                        <Ui::Button @wrapperClass="mr-2" @icon="long-arrow-alt-left" @text="Back" @onClick={{fn this.leaveCategory this.category.parent_category}} />
-                        <Ui::Button @wrapperClass="mr-2" @icon="plus" @iconPrefix="fas" @text="Add Sub-Category" @onClick={{fn this.createNewSubCategory this.category}} />
-                        <Ui::Button @wrapperClass="mr-2" @icon="edit" @text="Edit Category" @onClick={{fn this.editCategory this.category}} />
-                        <Ui::Button @type="danger" @wrapperClass="mr-4" @icon="trash" @text="Delete Category" @onClick={{fn this.deleteCategory this.category}} />
+                        <Button @wrapperClass="mr-2" @icon="long-arrow-alt-left" @text="Back" @onClick={{fn this.leaveCategory this.category.parent_category}} />
+                        <Button @wrapperClass="mr-2" @icon="plus" @iconPrefix="fas" @text="Add Sub-Category" @onClick={{fn this.createNewSubCategory this.category}} />
+                        <Button @wrapperClass="mr-2" @icon="edit" @text="Edit Category" @onClick={{fn this.editCategory this.category}} />
+                        <Button @type="danger" @wrapperClass="mr-4" @icon="trash" @text="Delete Category" @onClick={{fn this.deleteCategory this.category}} />
                     </div>
                 </div>
             {{else}}
@@ -66,7 +66,7 @@
                 </div>
                 {{#if this.isLoading}}
                     <div class="ml-2 flex items-center">
-                        <Ui::Spinner class="mr-2 text-sky-400" />
+                        <Spinner class="mr-2 text-sky-400" />
                         <span class="dark:text-sky-100 text-xs">Loading...</span>
                     </div>
                 {{/if}}
@@ -129,7 +129,7 @@
                                 {{store.name}}
                             </div>
                             <div>
-                                <Ui::DropdownButton @size="xs" @icon="cog" @iconPrefix="fas" @textClass="block truncate" as |dd|>
+                                <DropdownButton @size="xs" @icon="cog" @iconPrefix="fas" @textClass="block truncate" as |dd|>
                                     <div class="next-dd-menu" aria-orientation="vertical" aria-labelledby="user-menu">
                                         <div class="px-1">
                                             <div class="next-dd-title">
@@ -152,7 +152,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                </Ui::DropdownButton>
+                                </DropdownButton>
                             </div>
                         </div>
                     </div>

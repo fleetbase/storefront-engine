@@ -31,7 +31,7 @@
                 <InputGroup @name="Logo" @helpText="Logo for your store.">
                     <div class="flex flex-row items-center">
                         <img src={{@model.logo_url}} alt={{concat @model.name " logo"}} class="h-20 w-64 border dark:border-gray-900 rounded-md mr-4" />
-                        <FileUpload @name="logo" @accept="image/*" @onfileadd={{fn this.uploadFile "storefront_logo"}} as |queue|>
+                        <FileUpload @name="logo" @accept="image/*" @onFileAdded={{fn this.uploadFile "storefront_logo"}} as |queue|>
                             <a tabindex={{0}} class="flex items-center px-0 mt-2 text-xs no-underline truncate btn btn-sm btn-default">
                                 {{#if queue.files.length}}
                                     <Spinner class="mr-1" />
@@ -52,7 +52,7 @@
                 <InputGroup @name="Backdrop" @helpText="Optional banner or background image for your store.">
                     <div class="flex flex-row items-center">
                         <img src={{@model.backdrop_url}} alt={{concat @model.name " backdrop"}} class="h-20 w-64 border dark:border-gray-900 rounded-md mr-4" />
-                        <FileUpload @name="backdrop" @accept="image/*" @onfileadd={{fn this.uploadFile "storefront_backdrop"}} as |queue|>
+                        <FileUpload @name="backdrop" @accept="image/*" @onFileAdded={{fn this.uploadFile "storefront_backdrop"}} as |queue|>
                             <a tabindex={{0}} class="flex items-center px-0 mt-2 text-xs no-underline truncate btn btn-sm btn-default">
                                 {{#if queue.files.length}}
                                     <Spinner class="mr-1" />

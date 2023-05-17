@@ -9,6 +9,7 @@ export default class NetworksIndexNetworkStoresController extends Controller {
     @service notifications;
     @service modalsManager;
     @service fetch;
+    @service store;
     @tracked network;
     @tracked category;
     @tracked isLoading = false;

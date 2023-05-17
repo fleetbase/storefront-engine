@@ -117,7 +117,7 @@ export default class OrdersIndexController extends Controller {
             filterComponent: 'filter/model',
             filterComponentPlaceholder: 'Select order customer',
             filterParam: 'customer',
-            model: 'storefront-customer',
+            model: 'customer',
         },
         {
             label: 'Pickup',
@@ -130,7 +130,7 @@ export default class OrdersIndexController extends Controller {
             filterComponent: 'filter/model',
             filterComponentPlaceholder: 'Select order pickup location',
             filterParam: 'pickup',
-            model: 'storefront-place',
+            model: 'place',
         },
         {
             label: 'Dropoff',
@@ -143,7 +143,7 @@ export default class OrdersIndexController extends Controller {
             filterComponent: 'filter/model',
             filterComponentPlaceholder: 'Select order dropoff location',
             filterParam: 'dropoff',
-            model: 'storefront-place',
+            model: 'place',
         },
         {
             label: 'Scheduled At',
@@ -185,7 +185,7 @@ export default class OrdersIndexController extends Controller {
         },
         {
             label: 'Driver Assigned',
-            cellComponent: 'cell/driver-name',
+            cellComponent: 'table/cell/driver-name',
             valuePath: 'driver_assigned',
             modelPath: 'driver_assigned',
             width: '170px',
@@ -195,7 +195,7 @@ export default class OrdersIndexController extends Controller {
             filterComponent: 'filter/model',
             filterComponentPlaceholder: 'Select driver for order',
             filterParam: 'driver',
-            model: 'storefront-driver',
+            model: 'driver',
             query: {
                 // no model, serializer, adapter for relations
                 without: ['fleets', 'vendor', 'vehicle', 'currentJob'],
