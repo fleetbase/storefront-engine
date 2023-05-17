@@ -35,7 +35,7 @@
                 <InputGroup @name="Logo" @helpText="Logo for your store.">
                     <div class="flex flex-row items-center">
                         <img src={{@model.logo_url}} alt={{concat @model.name " logo"}} class="h-20 w-64 border dark:border-gray-900 rounded-md mr-4" />
-                        <FileUpload @name="logo" @accept="image/*" @onfileadd={{fn this.uploadFile "storefront_logo"}} as |queue|>
+                        <FileUpload @name="logo" @accept="image/*" @onFileAdded={{fn this.uploadFile "storefront_logo"}} as |queue|>
                             <a tabindex={{0}} class="flex items-center px-0 mt-2 text-xs no-underline truncate btn btn-sm btn-default">
                                 {{#if queue.files.length}}
                                     <Spinner class="mr-1" />
@@ -56,7 +56,7 @@
                 <InputGroup @name="Backdrop" @helpText="Optional banner or background image for your store.">
                     <div class="flex flex-row items-center">
                         <img src={{@model.backdrop_url}} alt={{concat @model.name " backdrop"}} class="h-20 w-64 border dark:border-gray-900 rounded-md mr-4" />
-                        <FileUpload @name="backdrop" @accept="image/*" @onfileadd={{fn this.uploadFile "storefront_backdrop"}} as |queue|>
+                        <FileUpload @name="backdrop" @accept="image/*" @onFileAdded={{fn this.uploadFile "storefront_backdrop"}} as |queue|>
                             <a tabindex={{0}} class="flex items-center px-0 mt-2 text-xs no-underline truncate btn btn-sm btn-default">
                                 {{#if queue.files.length}}
                                     <Spinner class="mr-1" />
@@ -84,7 +84,7 @@
                             </div>
                         </div>
                     {{else}}
-                        <FileDropzone @name="files" @multiple={{true}} @onfileadd={{this.queueFile}} @accept={{join "," this.acceptedFileTypes}} class="dropzone file-dropzone" as |dropzone queue|>
+                        <FileDropzone @name="files" @multiple={{true}} @onFileAdded={{fn this.queueFile}} @accept={{join "," this.acceptedFileTypes}} class="dropzone file-dropzone" as |dropzone queue|>
                             {{#if dropzone.active}}
                                 {{#if dropzone.valid}}
                                     Drop to upload
@@ -107,7 +107,7 @@
                                     {{#if dropzone.supported}}
                                         <p class="text-base font-semibold my-5">Drag and drop image and video files onto this dropzone</p>
                                     {{/if}}
-                                    <FileUpload @name="files" @for="files" @accept={{join "," this.acceptedFileTypes}} @multiple={{true}} @onfileadd={{this.queueFile}}>
+                                    <FileUpload @name="files" @for="files" @accept={{join "," this.acceptedFileTypes}} @multiple={{true}} @onFileAdded={{fn this.queueFile}}>
                                         <a tabindex={{0}} class="btn btn-magic cursor-pointer ml-1">or select files to upload.</a>
                                     </FileUpload>
                                 </div>
