@@ -1,4 +1,5 @@
 import Model, { attr, hasMany } from '@ember-data/model';
+import { format, formatDistanceToNow } from 'date-fns';
 
 export default class ProductVariantModel extends Model {
     /** @ids */
@@ -27,18 +28,18 @@ export default class ProductVariantModel extends Model {
 
     /** @computed */
     get updatedAgo() {
-        return moment(this.updated_at).fromNow();
+        return formatDistanceToNow(this.updated_at);
     }
 
     get updatedAt() {
-        return moment(this.updated_at).format('DD MMM YYYY');
+        return format(this.updated_at, 'PPP');
     }
 
     get createdAgo() {
-        return moment(this.created_at).fromNow();
+        return formatDistanceToNow(this.created_at);
     }
 
     get createdAt() {
-        return moment(this.created_at).format('DD MMM YYYY');
+        return format(this.created_at, 'PPP p');
     }
 }

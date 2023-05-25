@@ -3,7 +3,6 @@ import { tracked } from '@glimmer/tracking';
 import { isArray } from '@ember/array';
 import { action } from '@ember/object';
 import { alias } from '@ember/object/computed';
-import { isEmpty } from '@ember/utils';
 import { underscore } from '@ember/string';
 import { inject as service } from '@ember/service';
 

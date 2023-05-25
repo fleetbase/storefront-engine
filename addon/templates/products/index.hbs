@@ -6,7 +6,7 @@
 </Layout::Section::Header>
 
 <Layout::Section::Body class="section-content flex flex-col lg:flex-row">
-    <AsideItemScroller @title="Product Categories" @resource="category" @items={{@model}} @titleKey="name" @onCreate={{this.createNewProductCategory}} @onInit={{this.setAsideScroller}} @customTopItemComponent="aside-item-scroller/item" @customTopItemText="All Products" @customTopItemOnClick={{this.viewAllProducts}} @customTopItemClass="border-t border-gray-200 dark:border-gray-700" as |category dd|>
+    <AsideItemScroller @title="Product Categories" @resource="category" @items={{@model}} @titleKey="name" @onCreate={{this.createNewProductCategory}} @onInit={{this.setAsideScroller}} @customTopItemComponent="aside-item-scroller/item" @customTopItemText="All Products" @customTopItemOnClick={{this.viewAllProducts}} @customTopItemClass="border-t border-gray-200 dark:border-gray-700" as |category|>
         <a href="javascript:;" class="aside-item-link cursor-pointer flex w-full md:px-6 md:py-5" {{on "click" (fn this.switchCategory category)}}>
             <div class="flex items-center justify-between">
                 <div>

@@ -18,14 +18,14 @@
                                 </div>
                                 <div>
                                     <DropdownButton @renderInPlace={{true}} @size="xs" @icon="cog" @iconPrefix="fas" @textClass="block truncate text-gray-700 dark:text-gray-100" as |dd|>
-                                        <div class="next-dd-menu" aria-orientation="vertical" aria-labelledby="user-menu">
+                                        <div role="menu" class="next-dd-menu" aria-orientation="vertical" aria-labelledby="user-menu">
                                             <div class="px-1">
                                                 <div class="next-dd-title">
                                                     Network Options
                                                 </div>
                                             </div>
                                             <div class="next-dd-menu-seperator"></div>
-                                            <div class="px-1">
+                                            <div role="group" class="px-1">
                                                 <a href="javascript:;" class="next-dd-item" role="menuitem" {{on "click" (dropdown-fn dd this.manageNetwork network)}}>
                                                     <div class="w-7">
                                                         <FaIcon @icon="network-wired" class="mr-2" />

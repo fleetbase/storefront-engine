@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { alias } from '@ember/object/computed';
 
 export default class ModalsManageAddonsComponent extends Component {
     @service store;

@@ -1,7 +1,6 @@
 import Service from '@ember/service';
 import Evented from '@ember/object/evented';
 import { inject as service } from '@ember/service';
-import socketClusterClient from 'socketcluster';
 
 export default class StorefrontService extends Service.extend(Evented) {
     @service store;

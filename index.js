@@ -8,14 +8,6 @@ module.exports = buildEngine({
         enabled: true,
     },
     _concatStyles: () => {},
-    included: function (app) {
-        this._super.included.apply(this, arguments);
-
-        // socketcluster
-        this.import('node_modules/socketcluster-client/socketcluster-client.min.js', {
-            using: [{ transformation: 'es6', as: 'socketcluster' }],
-        });
-    },
     isDevelopingAddon() {
         return true;
     },
