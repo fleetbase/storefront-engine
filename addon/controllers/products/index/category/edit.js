@@ -2,7 +2,6 @@ import ProductsIndexCategoryNewController from './new';
 import { tracked } from '@glimmer/tracking';
 import { alias } from '@ember/object/computed';
 import { action } from '@ember/object';
-import { isArray } from '@ember/array';
 
 export default class ProductsIndexCategoryEditController extends ProductsIndexCategoryNewController {
     @alias('model') product;

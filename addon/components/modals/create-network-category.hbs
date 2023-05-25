@@ -21,7 +21,7 @@
             {{else}}
                 <div class="w-32">
                     <img src={{@options.category.icon_url}} alt={{@options.category.name}} class="w-full rounded-md" />
-                    <FileUpload @name="icons" @accept="image/*" @onFileAdded={{fn @options.uploadIcon}} as |queue|>
+                    <FileUpload @name="icons" @accept="image/*" @onFileAdded={{@options.uploadIcon}} as |queue|>
                         <a tabindex={{0}} class="flex items-center px-0 mt-2 text-xs no-underline truncate btn btn-sm btn-default">
                             {{#if queue.files.length}}
                                 <Spinner class="mr-1" />

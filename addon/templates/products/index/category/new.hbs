@@ -196,7 +196,7 @@
                                     {{#if dropzone.supported}}
                                         <p class="text-base font-semibold my-5">Drag and drop image and video files onto this dropzone</p>
                                     {{/if}}
-                                    <FileUpload @name="files" @for="files" @accept={{join "," this.acceptedFileTypes}} @multiple={{true}} @onFileAdded={{fn this.queueFile}}>
+                                    <FileUpload @name="files" @for="files" @accept={{join "," this.acceptedFileTypes}} @multiple={{true}} @onFileAdded={{this.queueFile}}>
                                         <a tabindex={{0}} class="btn btn-magic cursor-pointer ml-1">or select files to upload.</a>
                                     </FileUpload>
                                 </div>

@@ -7,9 +7,4 @@ export default class NetworksIndexNetworkIndexRoute extends Route {
     model() {
         return this.modelFor('networks.index.network');
     }
-
-    afterModel(model) {
-        // model.loadNotificationChannels();
-        // model.loadPaymentGateways();
-    }
 }

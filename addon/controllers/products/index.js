@@ -4,8 +4,6 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { alias } from '@ember/object/computed';
 import { dasherize } from '@ember/string';
-import { timeout } from 'ember-concurrency';
-import { task } from 'ember-concurrency-decorators';
 
 export default class ProductsIndexController extends Controller {
     @service store;
@@ -59,7 +57,7 @@ export default class ProductsIndexController extends Controller {
             company_uuid: this.currentUser.companyId,
             owner_uuid: this.currentUser.getOption('activeStorefront'),
             owner_type: 'storefront:store',
-            for: 'storefront_product'
+            for: 'storefront_product',
         });
 
         this.modalsManager.show('modals/create-product-category', {
@@ -90,7 +88,7 @@ export default class ProductsIndexController extends Controller {
             confirm: (modal) => {
                 modal.startLoading();
 
-                return category.save().then((category) => {
+                return category.save().then(() => {
                     this.notifications.success('New product category created.');
                     return this.hostRouter.refresh();
                 });

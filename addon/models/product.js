@@ -1,8 +1,7 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
 import { getOwner } from '@ember/application';
-import { set, setProperties } from '@ember/object';
-import { isArray } from '@ember/array';
+import { setProperties } from '@ember/object';
 import { isEmpty } from '@ember/utils';
 import { underscore } from '@ember/string';
 import { format, formatDistanceToNow } from 'date-fns';

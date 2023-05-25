@@ -6,7 +6,7 @@ export default class ProductsIndexRoute extends Route {
     @service store;
     @service currentUser;
 
-    @action willTransition(transition) {
+    @action willTransition() {
         this.controller.category = null;
     }
 

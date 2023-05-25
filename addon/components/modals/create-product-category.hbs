@@ -8,7 +8,7 @@
                     <Image src={{@options.category.icon_url}} @fallbackSrc={{config "defaultValues.categoryImage"}} alt={{@options.category.name}} height="80" width="80" class="h-20 w-20 rounded-md" />
                 </div>
                 <div class="flex-1">
-                    <FileUpload @name="photos" @accept="image/*" @onFileAdded={{fn @options.uploadNewPhoto}} as |queue|>
+                    <FileUpload @name="photos" @accept="image/*" @onFileAdded={{@options.uploadNewPhoto}} as |queue|>
                         <a tabindex={{0}} class="flex items-center px-0 mt-2 text-xs no-underline truncate btn btn-sm btn-default">
                             {{#if queue.files.length}}
                                 <Spinner class="mr-1" />

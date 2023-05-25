@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { action, computed } from '@ember/object';
+import { action } from '@ember/object';
 import { dasherize } from '@ember/string';
 import { isBlank } from '@ember/utils';
 import { timeout } from 'ember-concurrency';
@@ -140,7 +140,7 @@ export default class ProductsIndexCategoryController extends Controller {
             confirm: (modal) => {
                 modal.startLoading();
 
-                return category.save().then((category) => {
+                return category.save().then(() => {
                     this.notifications.success('Category changes saved.');
                 });
             },

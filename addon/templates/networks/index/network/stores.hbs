@@ -130,14 +130,14 @@
                             </div>
                             <div>
                                 <DropdownButton @size="xs" @icon="cog" @iconPrefix="fas" @textClass="block truncate" as |dd|>
-                                    <div class="next-dd-menu" aria-orientation="vertical" aria-labelledby="user-menu">
+                                    <div role="menu" class="next-dd-menu" aria-orientation="vertical" aria-labelledby="user-menu">
                                         <div class="px-1">
                                             <div class="next-dd-title">
                                                 Store Options
                                             </div>
                                         </div>
                                         <div class="next-dd-menu-seperator"></div>
-                                        <div class="px-1">
+                                        <div role="group" class="px-1">
                                             {{!-- <a href="javascript:;" class="next-dd-item" role="menuitem">
                                                 <FaIcon @icon="receipt" class="mr-2" />
                                                 <span>View orders via network</span>
