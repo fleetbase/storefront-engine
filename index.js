@@ -4,10 +4,11 @@ const { name } = require('./package');
 
 module.exports = buildEngine({
     name,
+
     lazyLoading: {
         enabled: true,
     },
-    _concatStyles: () => {},
+
     isDevelopingAddon() {
         return true;
     },
