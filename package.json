@@ -2,7 +2,7 @@
     "name": "@fleetbase/storefront-engine",
     "extension": "Storefront",
     "icon": "store",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "priority": 1,
     "description": "Fleetbase Storefront extension provides a headless commerce module for launching e-commerce stores, on-demand apps, or marketplaces.",
     "keywords": [
@@ -38,7 +38,7 @@
     },
     "dependencies": {
         "@fleetbase/ember-core": "^0.0.2",
-        "@fleetbase/ember-ui": "^0.0.4",
+        "@fleetbase/ember-ui": "^0.0.6",
         "@fleetbase/fleetops-data": "^0.0.2",
         "@fortawesome/ember-fontawesome": "^0.4.1",
         "@fortawesome/fontawesome-svg-core": "^6.4.0",
