@@ -1,6 +1,8 @@
 import Service from '@ember/service';
 import Evented from '@ember/object/evented';
+import config from 'ember-get-config';
 import { inject as service } from '@ember/service';
+import { isBlank } from '@ember/utils';
 
 export default class StorefrontService extends Service.extend(Evented) {
     @service store;
@@ -80,6 +82,16 @@ export default class StorefrontService extends Service.extend(Evented) {
         });
     }
 
+    createSocketClusterClient() {
+        const socketConfig = { ...config.socket };
+
+        if (isBlank(socketConfig.hostname)) {
+            socketConfig.hostname = window.location.hostname;
+        }
+
+        return socketClusterClient.create(socketConfig);
+    }
+
     async listenForIncomingOrders() {
         const store = this.findActiveStore();
 
@@ -87,11 +99,8 @@ export default class StorefrontService extends Service.extend(Evented) {
             return;
         }
 
-        const socket = socketClusterClient.create({
-            hostname: 'socket.fleetbase.io',
-            secure: true,
-            port: 8000,
-        });
+        // create socketcluster client
+        const socket = this.createSocketClusterClient();
 
         // listen on company channel
         const channel = socket.subscribe(`storefront.${store.public_id}`);
