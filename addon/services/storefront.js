@@ -1,8 +1,6 @@
 import Service from '@ember/service';
 import Evented from '@ember/object/evented';
-import config from 'ember-get-config';
 import { inject as service } from '@ember/service';
-import { isBlank } from '@ember/utils';
 
 export default class StorefrontService extends Service.extend(Evented) {
     @service store;
