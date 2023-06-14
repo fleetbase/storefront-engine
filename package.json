@@ -2,7 +2,7 @@
     "name": "@fleetbase/storefront-engine",
     "extension": "Storefront",
     "icon": "store",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "priority": 1,
     "fleetbase": {
         "dashboard": "storefront/int/v1/dashboard"
@@ -40,8 +40,8 @@
         "test:ember-compatibility": "ember try:each"
     },
     "dependencies": {
-        "@fleetbase/ember-core": "^0.0.4",
-        "@fleetbase/ember-ui": "^0.0.7",
+        "@fleetbase/ember-core": "^0.0.6",
+        "@fleetbase/ember-ui": "^0.0.8",
         "@fleetbase/fleetops-data": "^0.0.2",
         "@fortawesome/ember-fontawesome": "^0.4.1",
         "@fortawesome/fontawesome-svg-core": "^6.4.0",
