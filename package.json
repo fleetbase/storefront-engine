@@ -2,7 +2,7 @@
     "name": "@fleetbase/storefront-engine",
     "extension": "Storefront",
     "icon": "store",
-    "version": "0.0.9",
+    "version": "0.1.0",
     "priority": 1,
     "fleetbase": {
         "dashboard": "storefront/int/v1/dashboard"
@@ -40,9 +40,9 @@
         "test:ember-compatibility": "ember try:each"
     },
     "dependencies": {
-        "@fleetbase/ember-core": "^0.0.7",
+        "@fleetbase/ember-core": "^0.0.8",
         "@fleetbase/ember-ui": "^0.0.8",
-        "@fleetbase/fleetops-data": "^0.0.2",
+        "@fleetbase/fleetops-data": "^0.0.5",
         "@fortawesome/ember-fontawesome": "^0.4.1",
         "@fortawesome/fontawesome-svg-core": "^6.4.0",
         "@fortawesome/free-solid-svg-icons": "^6.4.0",
@@ -50,8 +50,7 @@
         "ember-cli-es6-transform": "^1.0.0",
         "ember-cli-htmlbars": "^6.1.0",
         "ember-tag-input": "^3.1.0",
-        "ember-wormhole": "^0.6.0",
-        "socketcluster-client": "^17.1.1"
+        "ember-wormhole": "^0.6.0"
     },
     "devDependencies": {
         "@ember/optional-features": "^2.0.0",
