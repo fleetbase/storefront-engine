@@ -2,14 +2,14 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@fleetbase/ember-core':
-    specifier: ^0.0.7
-    version: 0.0.7(@babel/core@7.22.1)(ember-fetch@8.1.2)(postcss@8.4.24)(webpack@5.74.0)
+    specifier: ^0.0.8
+    version: 0.0.8(@babel/core@7.22.1)(ember-fetch@8.1.2)(postcss@8.4.24)(webpack@5.74.0)
   '@fleetbase/ember-ui':
     specifier: ^0.0.8
     version: 0.0.8(@babel/core@7.22.1)(@ember/test-helpers@2.8.1)(ember-source@4.6.0)(rollup@3.23.1)(webpack@5.74.0)
   '@fleetbase/fleetops-data':
-    specifier: ^0.0.2
-    version: 0.0.2
+    specifier: ^0.0.5
+    version: 0.0.5
   '@fortawesome/ember-fontawesome':
     specifier: ^0.4.1
     version: 0.4.1(rollup@3.23.1)
@@ -34,9 +34,6 @@ dependencies:
   ember-wormhole:
     specifier: ^0.6.0
     version: 0.6.0
-  socketcluster-client:
-    specifier: ^17.1.1
-    version: 17.1.1
 
 devDependencies:
   '@ember/optional-features':
@@ -1880,8 +1877,8 @@ packages:
       - supports-color
     dev: true
 
-  /@fleetbase/ember-core@0.0.7(@babel/core@7.22.1)(ember-fetch@8.1.2)(postcss@8.4.24)(webpack@5.74.0):
-    resolution: {integrity: sha512-sHByATuNUjgihChE5/Pa2U35emlRVyAbvkOk+fSC1d3mX3sTm7mpsM+Z+gW8+ohbjCY+U3daWFio2458pntM0w==}
+  /@fleetbase/ember-core@0.0.8(@babel/core@7.22.1)(ember-fetch@8.1.2)(postcss@8.4.24)(webpack@5.74.0):
+    resolution: {integrity: sha512-Y8W3q2tACygGfE9HzNDGK/5KhN48sdVTQD2dZjYcApsrvduSPpCIHlpMuswyoan/IKovCeiXCICIJOVsSawn4Q==}
     engines: {node: 14.* || >= 16}
     dependencies:
       date-fns: 2.30.0
@@ -1975,18 +1972,15 @@ packages:
       - webpack-command
     dev: false
 
-  /@fleetbase/fleetops-data@0.0.2:
-    resolution: {integrity: sha512-i+5mzHMhkc96rO8lUDLwUcti9nK1tten8h8F8zJS1WqodiHbdWYjiLOlW2DdsDgaCBPHfhegkCDWDL7XfVqF/g==}
+  /@fleetbase/fleetops-data@0.0.5:
+    resolution: {integrity: sha512-v43REyxVzDeITl7CjKneQeICJQU243n+9ihmyiUP/xjKx/P8/fQ73DJgWOvDDTdVg2u5ltxCmtVcoN24RLhaSQ==}
     engines: {node: 14.* || >= 16}
     dependencies:
       date-fns: 2.30.0
       ember-cli-babel: 7.26.11
-      ember-cli-htmlbars: 6.1.0
-      socketcluster-client: 17.1.1
+      ember-cli-htmlbars: 6.2.0
     transitivePeerDependencies:
-      - bufferutil
       - supports-color
-      - utf-8-validate
     dev: false
 
   /@floating-ui/core@1.2.6:
