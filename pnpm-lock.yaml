@@ -8,8 +8,8 @@ dependencies:
     specifier: ^0.1.2
     version: 0.1.2(@babel/core@7.22.1)(@ember/test-helpers@2.8.1)(ember-source@4.6.0)(rollup@3.23.1)(webpack@5.74.0)
   '@fleetbase/fleetops-data':
-    specifier: ^0.0.5
-    version: 0.0.5
+    specifier: ^0.0.6
+    version: 0.0.6
   '@fortawesome/ember-fontawesome':
     specifier: ^0.4.1
     version: 0.4.1(rollup@3.23.1)
@@ -1972,8 +1972,8 @@ packages:
       - webpack-command
     dev: false
 
-  /@fleetbase/fleetops-data@0.0.5:
-    resolution: {integrity: sha512-v43REyxVzDeITl7CjKneQeICJQU243n+9ihmyiUP/xjKx/P8/fQ73DJgWOvDDTdVg2u5ltxCmtVcoN24RLhaSQ==}
+  /@fleetbase/fleetops-data@0.0.6:
+    resolution: {integrity: sha512-btyDaM6n5k7FdKvm9Pk2df6eAdehDbJ7RzTj9qFAX1vUmfFqh953/tSjBM6vhIUZcMV82CKC0h74EJfDog+2Lg==}
     engines: {node: 14.* || >= 16}
     dependencies:
       date-fns: 2.30.0
