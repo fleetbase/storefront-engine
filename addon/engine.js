@@ -17,7 +17,7 @@ export default class StorefrontEngine extends Engine {
     setupExtension = function (app, engine, universe) {
         // register menu item in header
         universe.registerHeaderMenuItem('Storefront', 'console.storefront', { icon: 'store', priority: 1 });
-    }
+    };
 }
 
 loadInitializers(StorefrontEngine, modulePrefix);

@@ -59,13 +59,20 @@ export default class WidgetOrdersComponent extends Component {
                 return resolve([]);
             }
 
-            this.store
-                .query('order', {
-                    storefront,
-                    limit: 14,
-                    sort: '-created_at',
-                    ...params,
-                })
+            this.fetch
+                .get(
+                    'orders',
+                    {
+                        storefront,
+                        limit: 14,
+                        sort: '-created_at',
+                        ...params,
+                    },
+                    {
+                        namespace: 'storefront/int/v1',
+                        normalizeToEmberData: true,
+                    }
+                )
                 .then((orders) => {
                     this.isLoading = false;
 
