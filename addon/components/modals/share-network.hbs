@@ -24,11 +24,11 @@
 
         <div class="rounded-md border dark:border-gray-800 dark:bg-gray-800 p-4">
             <h4 class="dark:text-gray-50 mb-4 font-semibold">Get link</h4>
-            <div class="input-group mb-0">
-                <ShortToggle @isToggled={{@options.network.options.shareable_link_enabled}} @onToggle={{@options.toggleShareableLink}} @label="Enable shareable link" @helpText="Anyone with this link is able to join your network" />
+            <div class="input-group mb-0i">
+                <Toggle @isToggled={{@options.network.options.shareable_link_enabled}} @onToggle={{@options.toggleShareableLink}} @label="Enable shareable link" @helpText="Anyone with this link is able to join your network" />
             </div>
             {{#if @options.network.options.shareable_link_enabled}}
-                <ClickToCopy class="mt-4 rounded-md border dark:border-gray-900 dark:bg-gray-900 truncate p-4 text-sm text-green-400 dark:text-green-300 text-center" @value={{@options.shareableLink}} />
+                <ClickToCopy class="mt-4 rounded-md border dark:border-gray-900 dark:bg-gray-900 truncate px-4 py-2.5 text-sm text-green-400 dark:text-green-300 text-center" @value={{@options.shareableLink}} />
             {{/if}}
         </div>
     </div>

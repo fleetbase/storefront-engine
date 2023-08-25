@@ -1,7 +1,9 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { getOwner } from '@ember/application';
 import { tracked } from '@glimmer/tracking';
-import { format, formatDistanceToNow } from 'date-fns';
+import { computed } from '@ember/object';
+import { isArray } from '@ember/array';
+import { format as formatDate, isValid as isValidDate, formatDistanceToNow } from 'date-fns';
 
 export default class StoreModel extends Model {
     /** @ids */
@@ -13,6 +15,7 @@ export default class StoreModel extends Model {
     /** @relationships */
     @hasMany('notification-channel') notification_channels;
     @hasMany('gateway') gateways;
+    @belongsTo('category') category;
     @belongsTo('file') logo;
     @belongsTo('file') backdrop;
     @hasMany('file') files;
@@ -48,20 +51,54 @@ export default class StoreModel extends Model {
     @tracked isLoadingFiles = false;
 
     /** @computed */
-    get updatedAgo() {
+    @computed('tags') get tagsList() {
+        if (isArray(this.tags)) {
+            this.tags.join(', ');
+        }
+
+        return '';
+    }
+
+    @computed('updated_at') get updatedAgo() {
+        if (!isValidDate(this.updated_at)) {
+            return null;
+        }
         return formatDistanceToNow(this.updated_at);
     }
 
-    get updatedAt() {
-        return format(this.updated_at, 'PPP');
+    @computed('updated_at') get updatedAt() {
+        if (!isValidDate(this.updated_at)) {
+            return null;
+        }
+        return formatDate(this.updated_at, 'PPP p');
     }
 
-    get createdAgo() {
+    @computed('updated_at') get updatedAtShort() {
+        if (!isValidDate(this.updated_at)) {
+            return null;
+        }
+        return formatDate(this.updated_at, 'PP');
+    }
+
+    @computed('created_at') get createdAgo() {
+        if (!isValidDate(this.created_at)) {
+            return null;
+        }
         return formatDistanceToNow(this.created_at);
     }
 
-    get createdAt() {
-        return format(this.created_at, 'PPP p');
+    @computed('created_at') get createdAt() {
+        if (!isValidDate(this.created_at)) {
+            return null;
+        }
+        return formatDate(this.created_at, 'PPP p');
+    }
+
+    @computed('created_at') get createdAtShort() {
+        if (!isValidDate(this.created_at)) {
+            return null;
+        }
+        return formatDate(this.created_at, 'PP');
     }
 
     /** @methods */

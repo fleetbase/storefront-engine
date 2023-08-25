@@ -32,10 +32,17 @@ export default class SettingsIndexController extends Controller {
     @action saveSettings() {
         this.isLoading = true;
 
-        this.model.save().then(() => {
-            this.notifications.success('Changes saved');
-            this.isLoading = false;
-        });
+        this.model
+            .save()
+            .then(() => {
+                this.notifications.success('Changes saved');
+            })
+            .catch((error) => {
+                this.notifications.serverError(error);
+            })
+            .finally(() => {
+                this.isLoading = false;
+            });
     }
 
     @action uploadFile(type, file) {
@@ -46,13 +53,13 @@ export default class SettingsIndexController extends Controller {
             {
                 path: `uploads/storefront/${this.activeStore.id}/${type}`,
                 key_uuid: this.activeStore.id,
-                key_type: `store:storefront`,
+                key_type: 'storefront:store',
                 type,
             },
             (uploadedFile) => {
                 this.model.setProperties({
                     [`${prefix}_uuid`]: uploadedFile.id,
-                    [`${prefix}_url`]: uploadedFile.s3url,
+                    [`${prefix}_url`]: uploadedFile.url,
                     [prefix]: uploadedFile,
                 });
             }
@@ -66,7 +73,7 @@ export default class SettingsIndexController extends Controller {
             {
                 path: `uploads/storefront/${this.activeStore.id}/media`,
                 key_uuid: this.activeStore.id,
-                key_type: `store:storefront`,
+                key_type: 'storefront:store',
                 type: `storefront_store_media`,
             },
             (uploadedFile) => {

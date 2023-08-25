@@ -11,6 +11,7 @@ export default class StoreSerializer extends ApplicationSerializer.extend(Embedd
         return {
             gateways: { embedded: 'always' },
             notification_channels: { embedded: 'always' },
+            category: { embedded: 'always' },
             logo: { embedded: 'always' },
             backdrop: { embedded: 'always' },
             files: { embedded: 'always' },
