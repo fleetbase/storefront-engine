@@ -1,6 +1,6 @@
 {
     "name": "@fleetbase/storefront-engine",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "description": "Fleetbase Storefront extension provides a headless commerce module for launching e-commerce stores, on-demand apps, or marketplaces.",
     "fleetbase": {
         "route": "storefront",
@@ -40,8 +40,8 @@
         "publish:github": "npm config set '@fleetbase:registry' https://npm.pkg.github.com/ && npm publish"
     },
     "dependencies": {
-        "@fleetbase/ember-core": "^0.1.1",
-        "@fleetbase/ember-ui": "^0.1.7",
+        "@fleetbase/ember-core": "^0.1.2",
+        "@fleetbase/ember-ui": "^0.1.8",
         "@fleetbase/fleetops-data": "^0.0.6",
         "@fortawesome/ember-fontawesome": "^0.4.1",
         "@fortawesome/fontawesome-svg-core": "^6.4.0",
@@ -73,7 +73,6 @@
         "ember-concurrency-decorators": "^2.0.3",
         "ember-data": "~4.6.0",
         "ember-disable-prototype-extensions": "^1.1.3",
-        "ember-drag-sort": "^3.0.1",
         "ember-engines": "^0.8.23",
         "ember-load-initializers": "^2.1.2",
         "ember-math-helpers": "^2.18.2",

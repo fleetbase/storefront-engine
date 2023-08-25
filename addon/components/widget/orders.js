@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { action, computed } from '@ember/object';
+import { action, computed, get } from '@ember/object';
 import { later } from '@ember/runloop';
 
 export default class WidgetOrdersComponent extends Component {
@@ -26,8 +26,15 @@ export default class WidgetOrdersComponent extends Component {
             100
         );
 
-        this.storefront.on('order.broadcasted', this.reloadOrders);
-        this.storefront.on('storefront.changed', this.reloadOrders);
+        // reload orders when new order income
+        this.storefront.on('order.broadcasted', () => {
+            this.reloadOrders();
+        });
+
+        // reload orders when store changes
+        this.storefront.on('storefront.changed', () => {
+            this.reloadOrders();
+        });
     }
 
     @action async reloadOrders(params = {}) {
@@ -52,27 +59,25 @@ export default class WidgetOrdersComponent extends Component {
         this.isLoading = true;
 
         return new Promise((resolve) => {
-            const storefront = this.storefront?.activeStore?.public_id;
+            const storefront = get(this.storefront, 'activeStore.public_id');
 
             if (!storefront) {
                 this.isLoading = false;
                 return resolve([]);
             }
 
+            const queryParams = {
+                storefront,
+                limit: 14,
+                sort: '-created_at',
+                ...params,
+            };
+
             this.fetch
-                .get(
-                    'orders',
-                    {
-                        storefront,
-                        limit: 14,
-                        sort: '-created_at',
-                        ...params,
-                    },
-                    {
-                        namespace: 'storefront/int/v1',
-                        normalizeToEmberData: true,
-                    }
-                )
+                .get('orders', queryParams, {
+                    namespace: 'storefront/int/v1',
+                    normalizeToEmberData: true,
+                })
                 .then((orders) => {
                     this.isLoading = false;
 

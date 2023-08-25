@@ -131,7 +131,7 @@ export default class ProductsIndexCategoryController extends Controller {
                     (uploadedFile) => {
                         category.setProperties({
                             icon_file_uuid: uploadedFile.id,
-                            icon_url: uploadedFile.s3url,
+                            icon_url: uploadedFile.url,
                             icon: uploadedFile,
                         });
                     }

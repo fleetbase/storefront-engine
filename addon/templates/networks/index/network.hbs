@@ -1,6 +1,5 @@
-<Overlay @position="right" @noBackdrop={{true}} @fullHeight={{true}} @width={{if (media "isAnyDesktop") "868px"}}>
+<Overlay @position="right" @isResizable={{true}} @noBackdrop={{true}} @width="800px" @minResizeWidth={{700}} @fullHeight={{true}}>
     <Overlay::Header @title="Manage Network" @onPressCancel={{this.transitionBack}} />
-
     <Overlay::Body class="p-0i" @increaseInnerBodyHeightBy="0" @wrapperClass="space-y-4 pt-4">
         <div class="flex flex-col">
             <div class="px-4 flex items-center section-header-title mb-4">
@@ -33,6 +32,6 @@
             </div>
         </div>
 
-        <div class="p-6">{{outlet}}</div>
+        <div>{{outlet}}</div>
     </Overlay::Body>
 </Overlay>

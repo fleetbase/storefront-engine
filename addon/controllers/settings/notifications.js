@@ -18,7 +18,7 @@ export default class SettingsNotificationsController extends Controller {
     @action createChannel() {
         const channel = this.store.createRecord('notification-channel', {
             owner_uuid: this.activeStore.id,
-            owner_type: 'store:storefront',
+            owner_type: 'storefront:store',
         });
 
         this.editChannel(channel, {

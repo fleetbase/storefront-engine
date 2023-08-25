@@ -2,53 +2,265 @@ import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { action, set } from '@ember/object';
-import consoleUrl from '@fleetbase/console/utils/console-url';
-import isEmail from '@fleetbase/console/utils/is-email';
+import { isBlank } from '@ember/utils';
+import { timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency-decorators';
+import createShareableLink from '../../../../utils/create-shareable-link';
+import isEmail from '@fleetbase/ember-core/utils/is-email';
+import isModel from '@fleetbase/ember-core/utils/is-model';
 
 export default class NetworksIndexNetworkStoresController extends Controller {
+    /**
+     * Inject the `notifications` service
+     *
+     * @var {Service}
+     * @memberof NetworksIndexNetworkStoresController
+     */
     @service notifications;
+
+    /**
+     * Inject the `modals-manager` service
+     *
+     * @var {Service}
+     * @memberof NetworksIndexNetworkStoresController
+     */
     @service modalsManager;
+
+    /**
+     * Inject the `crud` service
+     *
+     * @var {Service}
+     * @memberof NetworksIndexNetworkStoresController
+     */
+    @service crud;
+
+    /**
+     * Inject the `fetch` service
+     *
+     * @var {Service}
+     * @memberof NetworksIndexNetworkStoresController
+     */
     @service fetch;
+
+    /**
+     * Inject the `store` service
+     *
+     * @var {Service}
+     * @memberof NetworksIndexNetworkStoresController
+     */
     @service store;
-    @tracked network;
+
+    /**
+     * Inject the `hostRouter` service
+     *
+     * @var {Service}
+     * @memberof NetworksIndexNetworkStoresController
+     */
+    @service hostRouter;
+
+    /**
+     * Queryable parameters for this controller's model
+     *
+     * @var {Array}
+     * @memberof NetworksIndexNetworkStoresController
+     */
+    queryParams = ['category', 'status', 'storeQuery'];
+
+    /**
+     * The current page of data being viewed
+     *
+     * @var {Integer}
+     * @memberof NetworksIndexNetworkStoresController
+     */
+    @tracked page = 1;
+
+    /**
+     * The maximum number of items to show per page
+     *
+     * @var {Integer}
+     */
+    @tracked limit;
+
+    /**
+     * The search query
+     *
+     * @var {String}
+     * @memberof NetworksIndexNetworkStoresController
+     */
+    @tracked storeQuery;
+
+    /**
+     * The param to sort the data on, the param with prepended `-` is descending
+     *
+     * @var {String}
+     * @memberof NetworksIndexNetworkStoresController
+     */
+    @tracked sort;
+
+    /**
+     * The param to filter stores by category.
+     *
+     * @var {String}
+     * @memberof NetworksIndexNetworkStoresController
+     */
     @tracked category;
+
+    /**
+     * The current network.
+     *
+     * @var {NetworkModel}
+     * @memberof NetworksIndexNetworkStoresController
+     */
+    @tracked network;
+
+    /**
+     * The loading state.
+     *
+     * @var {Boolean}
+     * @memberof NetworksIndexNetworkStoresController
+     */
     @tracked isLoading = false;
-    @tracked categories = [];
-    @tracked subCategories = [];
-    @tracked stores = [];
 
-    dragulaConfig = {
-        isContainer: (el) => el.classList.contains('dragula-container'),
-        moves: (el) => el.classList.contains('network-store'),
-        accepts: (el) => el.classList.contains('network-store'),
-        revertOnSpill: true,
-    };
+    /**
+     * All columns applicable for network stores
+     *
+     * @var {Array}
+     */
+    @tracked columns = [
+        {
+            label: 'Store',
+            valuePath: 'name',
+            width: '130px',
+            resizable: true,
+            sortable: true,
+            filterable: true,
+            filterComponent: 'filter/string',
+            showOnlineIndicator: true,
+        },
+        {
+            label: 'ID',
+            valuePath: 'public_id',
+            cellComponent: 'click-to-copy',
+            width: '120px',
+            resizable: true,
+            sortable: true,
+            filterable: true,
+            filterComponent: 'filter/string',
+        },
+        {
+            label: 'Category',
+            valuePath: 'category.name',
+            cellComponent: 'table/cell/base',
+            width: '100px',
+            resizable: true,
+            sortable: true,
+            filterable: true,
+            filterComponent: 'filter/string',
+        },
+        {
+            label: 'Currency',
+            valuePath: 'currency',
+            cellComponent: 'table/cell/base',
+            width: '100px',
+            resizable: true,
+            sortable: true,
+            filterable: true,
+            filterComponent: 'filter/string',
+        },
+        {
+            label: 'Created At',
+            valuePath: 'createdAtShort',
+            sortParam: 'created_at',
+            width: '100px',
+            resizable: true,
+            sortable: true,
+            filterable: true,
+            filterComponent: 'filter/date',
+        },
+        {
+            label: '',
+            cellComponent: 'table/cell/dropdown',
+            ddButtonText: false,
+            ddButtonIcon: 'ellipsis-h',
+            ddButtonIconPrefix: 'fas',
+            ddMenuLabel: 'Store Actions',
+            cellClassNames: 'overflow-visible',
+            wrapperClass: 'flex items-center justify-end mx-2',
+            width: '50px',
+            actions: [
+                {
+                    label: 'View Store Details',
+                    fn: this.viewStoreDetails,
+                },
+                {
+                    label: 'Edit Store',
+                    fn: this.editStore,
+                },
+                {
+                    label: 'Assign Category',
+                    fn: this.assignStoreToCategory,
+                },
+                {
+                    separator: true,
+                },
+                {
+                    label: 'Remove Store from Network',
+                    fn: this.removeStore,
+                },
+            ],
+            sortable: false,
+            filterable: false,
+            resizable: false,
+            searchable: false,
+        },
+    ];
 
-    @action dropdownAction(dd, action, ...params) {
-        if (dd.actions && typeof dd.actions.close === 'function') {
-            dd.actions.close();
+    /**
+     * The search task.
+     *
+     * @void
+     */
+    @task({ restartable: true }) *search({ target: { value } }) {
+        // if no query don't search
+        if (isBlank(value)) {
+            this.storeQuery = null;
+            return;
         }
 
-        if (typeof this[action] === 'function') {
-            this[action](...params);
+        // timeout for typing
+        yield timeout(250);
+
+        // reset page for results
+        if (this.page > 1) {
+            this.page = 1;
+        }
+
+        // update the query param
+        this.storeQuery = value;
+    }
+
+    /**
+     * Selects a category and assigns its ID to the current category property.
+     * If the selected category is null, the category property is set to null.
+     *
+     * @action
+     * @param {CategoryModel|null} selectedCategory - The selected category object containing the ID.
+     */
+    @action selectCategory(selectedCategory) {
+        if (selectedCategory) {
+            this.category = selectedCategory.id;
+        } else {
+            this.category = null;
         }
     }
 
-    @action enterCategory(category) {
-        this.category = category;
-        this.fetchStores(category);
-        this.fetchSubcategories(category);
-    }
-
-    @action leaveCategory(parentCategory) {
-        if (parentCategory) {
-            return this.enterCategory(parentCategory);
-        }
-
-        this.category = null;
-        this.fetchStores();
-    }
-
+    /**
+     * Deletes a specified category and moves all stores inside to the top level.
+     * A confirmation modal is displayed before deletion.
+     *
+     * @action
+     * @param {CategoryModel} category - The category object containing the ID to be deleted.
+     */
     @action deleteCategory(category) {
         this.modalsManager.confirm({
             title: 'Delete network category?',
@@ -65,74 +277,61 @@ export default class NetworksIndexNetworkStoresController extends Controller {
         });
     }
 
-    @action fetchSubcategories(parentCategory) {
-        this.store
-            .query('category', { parent_uuid: parentCategory.id })
-            .then((subCategories) => {
-                this.subCategories = subCategories.toArray().map((category) => {
-                    category.parent_category = parentCategory;
+    /**
+     * Displays a modal to assign a store to a category or create a new category.
+     * Allows the user to select a category, create a new one, or confirm the assignment.
+     *
+     * @action
+     * @param {StoreModel} store - The store object to be assigned to a category.
+     * @param {Object} [options={}] - Additional options for the modal.
+     */
+    @action assignStoreToCategory(store, options = {}) {
+        this.modalsManager.show('modals/add-store-to-category', {
+            title: 'Add store to category',
+            acceptButtonText: 'Save Changes',
+            acceptButtonIcon: 'save',
+            selectedCategory: null,
+            network: this.network,
+            onSelectCategory: (category) => {
+                this.modalsManager.setOption('selectedCategory', category);
+            },
+            createNewCategory: (networkCategoriesPicker, parentCategory) => {
+                this.modalsManager.done();
 
-                    return category;
+                return this.createNewCategory(networkCategoriesPicker, parentCategory, {
+                    onFinish: () => {
+                        return this.assignStoreToCategory(store);
+                    },
                 });
-                this.isLoading = false;
-            })
-            .finally(() => {
-                this.isLoading = false;
-            });
-    }
+            },
+            confirm: (modal) => {
+                modal.startLoading();
+                const selectedCategory = this.modalsManager.getOption('selectedCategory');
 
-    @action fetchStores(category) {
-        const params = {
-            network: this.network.id,
-        };
-
-        if (category) {
-            params.category = category.id;
-        } else {
-            params.without_category = true;
-        }
-
-        this.isLoading = true;
-
-        this.store
-            .query('store', params)
-            .then((stores) => {
-                this.stores = stores.toArray();
-                this.isLoading = false;
-            })
-            .finally(() => {
-                this.isLoading = false;
-            });
-    }
-
-    @action setDragulaInstance(dragula) {
-        dragula
-            .on('over', (el, container) => {
-                // console.log('over()', el, container);
-                if (container.classList.contains('network-folder')) {
-                    container.classList.add('hovering');
+                if (selectedCategory) {
+                    return this.addStoreToCategory(store, selectedCategory).then(() => {
+                        this.notifications.success(`${store.name} category was changed to ${selectedCategory.name}`);
+                        this.hostRouter.refresh();
+                    });
                 }
-            })
-            .on('drop', (el, target) => {
-                // console.log('drop()', el, target);
-                const storeId = el?.dataset?.store;
-                const categoryId = target?.dataset?.category;
 
-                Array.from(dragula.containers).forEach((container) => {
-                    container.classList.remove('hovering');
-                });
-
-                if (categoryId) {
-                    const store = this.store.peekRecord('store', storeId);
-                    const category = this.store.peekRecord('category', categoryId);
-
-                    this.addStoreToCategory(store, category);
-                }
-            });
+                modal.done();
+            },
+            ...options,
+        });
     }
 
+    /**
+     * Sends a POST request to assign a store to a specified category.
+     * The category and store IDs are sent in the request body.
+     *
+     * @action
+     * @param {StoreModel} store - The store object containing the ID.
+     * @param {CategoryModel} category - The category object containing the ID.
+     * @returns {Promise} A promise that resolves when the request is complete.
+     */
     @action addStoreToCategory(store, category) {
-        this.fetch.post(
+        return this.fetch.post(
             `networks/${this.network.id}/set-store-category`,
             {
                 category: category.id,
@@ -142,58 +341,80 @@ export default class NetworksIndexNetworkStoresController extends Controller {
         );
     }
 
-    @action createNewCategory(network) {
-        const category = this.store.createRecord('category', {
-            owner_uuid: network.id,
-            owner_type: 'network:storefront',
+    /**
+     * Creates a new category with specified attributes and displays a modal for editing.
+     * Allows the user to confirm the creation and save the category.
+     *
+     * @action
+     * @param {NetworkCategoryPickerComponent} networkCategoriesPicker - Picker for network categories.
+     * @param {ParentCategory} parentCategory - The parent category object, if any.
+     * @param {Object} [options={}] - Additional options for the modal.
+     * @returns {Promise} A promise that resolves when the category is created.
+     */
+    @action createNewCategory(networkCategoriesPicker, parentCategory, options = {}) {
+        const categoryAttrs = {
+            owner_uuid: this.network.id,
+            owner_type: 'storefront:network',
             for: 'storefront_network',
-        });
+        };
+
+        if (isModel(parentCategory)) {
+            categoryAttrs.parent_uuid = parentCategory.id;
+            categoryAttrs.owner_uuid = parentCategory.owner_uuid;
+        }
+
+        const category = this.store.createRecord('category', categoryAttrs);
 
         return this.editCategory(category, {
             title: 'Add new network category',
             acceptButtonIcon: 'check',
+            acceptButtonText: 'Create new category',
+            successMessage: 'New category created.',
+            parentCategory,
             category,
             confirm: (modal) => {
                 modal.startLoading();
 
-                return category.save().then((category) => {
-                    this.notifications.success('New network category created.');
-                    this.categories.pushObject(category);
-                });
+                category
+                    .save()
+                    .then((category) => {
+                        this.notifications.success('New network category created.');
+                        networkCategoriesPicker.categories.pushObject(category);
+                        modal.done();
+                    })
+                    .catch((error) => {
+                        this.notifications.serverError(error);
+                    });
             },
+            ...options,
         });
     }
 
-    @action createNewSubCategory(parentCategory) {
-        const category = this.store.createRecord('category', {
-            parent_uuid: parentCategory.id,
-            owner_uuid: parentCategory.owner_uuid,
-            owner_type: 'network:storefront',
-            for: 'storefront_network',
-        });
-
-        return this.editCategory(category, {
-            title: 'Add new network category',
-            acceptButtonIcon: 'check',
-            category,
-            confirm: (modal) => {
-                modal.startLoading();
-
-                return category.save().then((category) => {
-                    this.notifications.success('New network category created.');
-                    this.subCategories.pushObject(category);
-                });
-            },
-        });
-    }
-
+    /**
+     * Displays a modal to edit a specified category.
+     * Allows the user to set or clear the parent category, upload an icon, and confirm the changes.
+     *
+     * @action
+     * @param {CategoryModel} category - The category object to be edited.
+     * @param {Object} [options={}] - Additional options for the modal.
+     */
     @action editCategory(category, options = {}) {
         this.modalsManager.show('modals/create-network-category', {
             title: `Edit category (${category.name})`,
             acceptButtonText: 'Save Changes',
             acceptButtonIcon: 'save',
             iconType: category.icon_file_uuid ? 'image' : 'svg',
+            network: this.network,
             category,
+            parentCategory: null,
+            setParentCategory: (parentCategory) => {
+                this.modalsManager.setOption('parentCategory', parentCategory);
+
+                // update on category
+                category.setProperties({
+                    parent_uuid: parentCategory.id,
+                });
+            },
             clearImage: () => {
                 category.setProperties({
                     icon_file_uuid: null,
@@ -213,7 +434,7 @@ export default class NetworksIndexNetworkStoresController extends Controller {
                     (uploadedFile) => {
                         category.setProperties({
                             icon_file_uuid: uploadedFile.id,
-                            icon_url: uploadedFile.s3url,
+                            icon_url: uploadedFile.url,
                             icon_file: uploadedFile,
                         });
                     }
@@ -223,16 +444,24 @@ export default class NetworksIndexNetworkStoresController extends Controller {
                 modal.startLoading();
 
                 return category.save().then(() => {
-                    this.notifications.success('Network category changes saved.');
+                    this.notifications.success(options.successMessage ?? 'Category changes saved.');
                 });
             },
             ...options,
         });
     }
 
-    @action async addStores(network) {
+    /**
+     * Displays a loader and shows a modal to add stores to the network.
+     * Allows the user to select stores, update the selection, and confirm the addition.
+     *
+     * @action
+     * @returns {Promise} A promise that resolves when the stores are added.
+     */
+    @action async addStores() {
         this.modalsManager.displayLoader();
 
+        const { network } = this;
         const stores = await this.store.findAll('store');
         const members = await network.loadStores();
 
@@ -255,16 +484,25 @@ export default class NetworksIndexNetworkStoresController extends Controller {
                     const remove = allStores.filter((store) => !stores.includes(store)); // stores to be removed
 
                     return network.addStores(stores, remove).then(() => {
-                        this.updateNetworkStores(stores, remove);
+                        return this.hostRouter.refresh().then(() => {
+                            this.notifications.success('Network stores updated.');
+                        });
                     });
                 },
             });
         });
     }
 
-    @action async removeStore(store, network) {
+    /**
+     * Displays a confirmation modal to remove a specified store from the network.
+     * Allows the user to confirm the removal.
+     *
+     * @action
+     * @param {StoreModel} store - The store object to be removed.
+     */
+    @action async removeStore(store) {
         this.modalsManager.confirm({
-            title: `Remove this store (${store.name}) from this network (${network.name})?`,
+            title: `Remove this store (${store.name}) from this network (${this.network.name})?`,
             body: 'Are you sure you wish to remove this store from this network? It will no longer be findable by this network.',
             acceptButtonIcon: 'check',
             acceptButtonIconPrefix: 'fas',
@@ -287,34 +525,65 @@ export default class NetworksIndexNetworkStoresController extends Controller {
         });
     }
 
-    @action updateNetworkStores(added = [], removed = []) {
-        const updatedStores = [];
-
-        for (let index = 0; index < this.stores.length; index++) {
-            const store = this.stores.objectAt(index);
-
-            if (removed.includes(store)) {
-                continue;
-            }
-
-            updatedStores.push(store);
-        }
-
-        for (let index = 0; index < added.length; index++) {
-            const addedStore = added.objectAt(index);
-
-            if (updatedStores.includes(addedStore)) {
-                continue;
-            }
-
-            updatedStores.push(addedStore);
-        }
-
-        this.stores = updatedStores.filter(Boolean).uniq();
+    /**
+     * Displays a modal to view the details of a specified store.
+     * The modal includes the store's name and a "Done" button.
+     *
+     * @action
+     * @param {StoreModel} store - The store object whose details are to be viewed.
+     * @param {Object} [options={}] - Additional options for the modal.
+     */
+    @action viewStoreDetails(store, options = {}) {
+        this.modalsManager.show('modals/store-details', {
+            title: `Viewing ${store.name} storefront`,
+            acceptButtonText: 'Done',
+            hideDeclineButton: true,
+            store,
+            ...options,
+        });
     }
 
-    @action invite(network) {
-        const shareableLink = consoleUrl(`join/network/${network.public_id}`);
+    /**
+     * Displays a modal to edit a specified store's details.
+     * Allows the user to make changes and confirm to save them.
+     *
+     * @action
+     * @param {StoreModel} store - The store object to be edited.
+     * @param {Object} [options={}] - Additional options for the modal.
+     */
+    @action editStore(store, options = {}) {
+        this.modalsManager.show('modals/store-form', {
+            title: `Editing ${store.name} storefront`,
+            acceptButtonText: 'Save Changes',
+            hideDeclineButton: true,
+            store,
+            confirm: (modal) => {
+                modal.startLoading();
+
+                console.log('saving store', store);
+
+                return store
+                    .save()
+                    .then(() => {
+                        this.notifications.success(`Changes to ${store.name} saved.`);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        this.notifications.serverError(error);
+                    });
+            },
+            ...options,
+        });
+    }
+
+    /**
+     * Displays a modal to invite stores to the network via shareable link or email invitations.
+     * Allows the user to add or remove recipients, toggle the shareable link, and confirm the invitations.
+     *
+     * @action
+     */
+    @action invite() {
+        const shareableLink = createShareableLink(`join/network/${this.network.public_id}`);
 
         this.modalsManager.show('modals/share-network', {
             title: 'Add stores to network',
@@ -323,7 +592,7 @@ export default class NetworksIndexNetworkStoresController extends Controller {
             acceptButtonDisabled: true,
             shareableLink,
             recipients: [],
-            network,
+            network: this.network,
             addRecipient: (email) => {
                 const recipients = this.modalsManager.getOption('recipients');
                 recipients.pushObject(email);
@@ -345,8 +614,8 @@ export default class NetworksIndexNetworkStoresController extends Controller {
                 }
             },
             toggleShareableLink: (enabled) => {
-                set(network, 'options.shareable_link_enabled', enabled);
-                network.save();
+                set(this.network, 'options.shareable_link_enabled', enabled);
+                this.network.save();
             },
             confirm: (modal) => {
                 modal.startLoading();
@@ -360,7 +629,7 @@ export default class NetworksIndexNetworkStoresController extends Controller {
                     return this.notifications.error('Invalid emails provided!');
                 }
 
-                return network.sendInvites(recipients).then(() => {
+                return this.network.sendInvites(recipients).then(() => {
                     modal.stopLoading();
                     this.notifications.success('Invitations sent to recipients!');
                 });

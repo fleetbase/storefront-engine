@@ -64,15 +64,45 @@ export default class NetworksIndexController extends Controller {
     @service filters;
 
     /**
+     * Inject the `hostRouter` service
+     *
+     * @var {Service}
+     */
+    @service hostRouter;
+
+    /**
      * Queryable parameters for this controller's model
      *
      * @var {Array}
      */
     queryParams = ['page', 'limit', 'sort', 'query'];
 
+    /**
+     * The current page of data being viewed.
+     *
+     * @var {Integer}
+     */
     @tracked page = 1;
-    @tracked limit;
+
+    /**
+     * The search query.
+     *
+     * @var {String}
+     */
     @tracked query;
+
+    /**
+     * The maximum number of items to show per page.
+     *
+     * @var {Integer}
+     */
+    @tracked limit;
+
+    /**
+     * The param to sort the data on, the param with prepended `-` is descending
+     *
+     * @var {String}
+     */
     @tracked sort = '-created_at';
 
     /**
@@ -99,14 +129,34 @@ export default class NetworksIndexController extends Controller {
         this.query = value;
     }
 
+    /**
+     * Send invites to a network.
+     *
+     * @method sendInvites
+     * @param {NetworkModel} network - The network object to which invites are sent.
+     * @public
+     */
     @action sendInvites(network) {
         this.networkStoresController.invite(network);
     }
 
+    /**
+     * Manage a specific network, transitioning to the appropriate route.
+     *
+     * @method manageNetwork
+     * @param {NetworkModel} network - The network object to manage.
+     * @public
+     */
     @action manageNetwork(network) {
         this.transitionToRoute('networks.index.network', network);
     }
 
+    /**
+     * Create a new network, with optional currency properties.
+     *
+     * @method createNetwork
+     * @public
+     */
     @action createNetwork() {
         const network = this.store.createRecord('network');
         const currency = this.currentUser.getWhoisProperty('currency.code');
@@ -121,9 +171,9 @@ export default class NetworksIndexController extends Controller {
             confirm: (modal) => {
                 modal.startLoading();
 
-                return network.save().then((network) => {
+                return network.save().then(() => {
                     this.notifications.success('Your new storefront network has been created!');
-                    this.networks.pushObject(network);
+                    return this.hostRouter.refresh();
                 });
             },
             decline: () => {
@@ -132,7 +182,19 @@ export default class NetworksIndexController extends Controller {
         });
     }
 
+    /**
+     * Delete a specific network, with a confirmation prompt.
+     *
+     * @method deleteNetwork
+     * @param {NetworkModel} network - The network object to delete.
+     * @public
+     */
     @action deleteNetwork(network) {
-        return this.crud.delete(network);
+        return this.crud.delete(network, {
+            title: `Are you sure you wish to delete this network (${network.name})? All assigned stores, customers, orders will no longer be reachable.`,
+            onSuccess: () => {
+                return this.hostRouter.refresh();
+            },
+        });
     }
 }
